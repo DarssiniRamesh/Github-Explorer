@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import RepositoryDetails from '../components/RepositoryDetails';
+import ErrorBoundary from '../components/ErrorBoundary';
 import ReadmePreview from '../components/ReadmePreview';
 import CommitHistory from '../components/CommitHistory';
 import ContributorsList from '../components/ContributorsList';
@@ -118,34 +119,42 @@ const RepositoryDetailsPage = () => {
           </button>
         </div>
         <div id="overview" className="content-section">
-          <RepositoryDetails
-            repository={repoDetails}
-            onClose={handleClose}
-            isLoading={isLoading}
-            error={error}
-          />
+          <ErrorBoundary fallback={<div>Failed to load repository details. Please try refreshing the page.</div>}>
+            <RepositoryDetails
+              repository={repoDetails}
+              onClose={handleClose}
+              isLoading={isLoading}
+              error={error}
+            />
+          </ErrorBoundary>
         </div>
         <div className="content-sections-grid">
           <div id="readme" className="content-section">
             <h3 className="section-title">README</h3>
-            <ReadmePreview
-              owner={username}
-              repo={reponame}
-            />
+            <ErrorBoundary fallback={<div>Failed to load README. Please try refreshing the page.</div>}>
+              <ReadmePreview
+                owner={username}
+                repo={reponame}
+              />
+            </ErrorBoundary>
           </div>
           <div id="commit-history" className="content-section">
             <h3 className="section-title">Recent Commits</h3>
-            <CommitHistory
-              owner={username}
-              repo={reponame}
-            />
+            <ErrorBoundary fallback={<div>Failed to load commit history. Please try refreshing the page.</div>}>
+              <CommitHistory
+                owner={username}
+                repo={reponame}
+              />
+            </ErrorBoundary>
           </div>
           <div id="contributors" className="content-section">
             <h3 className="section-title">Contributors</h3>
-            <ContributorsList
-              owner={username}
-              repo={reponame}
-            />
+            <ErrorBoundary fallback={<div>Failed to load contributors list. Please try refreshing the page.</div>}>
+              <ContributorsList
+                owner={username}
+                repo={reponame}
+              />
+            </ErrorBoundary>
           </div>
         </div>
       </div>

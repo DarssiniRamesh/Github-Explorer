@@ -4,6 +4,7 @@ import SearchBar from '../components/SearchBar';
 import SearchResults from '../components/SearchResults';
 import TrendingDevelopers from '../components/TrendingDevelopers';
 import RecentSearches from '../components/RecentSearches';
+import ErrorBoundary from '../components/ErrorBoundary';
 import { searchRepositories } from '../services/github';
 import { setCacheItem, getCacheItem } from '../services/cache';
 
@@ -53,22 +54,30 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
-      <SearchBar 
-        onSearch={handleSearch}
-        isLoading={isLoading}
-      />
+      <ErrorBoundary fallback={<div>Failed to load search functionality. Please refresh the page.</div>}>
+        <SearchBar 
+          onSearch={handleSearch}
+          isLoading={isLoading}
+        />
+      </ErrorBoundary>
       <div className="content">
         <div className="main-content">
-          <SearchResults
-            repositories={repositories}
-            onSelectRepository={handleSelectRepository}
-            isLoading={isLoading}
-            error={error}
-          />
+          <ErrorBoundary fallback={<div>Failed to load search results. Please try searching again.</div>}>
+            <SearchResults
+              repositories={repositories}
+              onSelectRepository={handleSelectRepository}
+              isLoading={isLoading}
+              error={error}
+            />
+          </ErrorBoundary>
         </div>
         <div className="sidebar">
-          <RecentSearches onSearch={handleSearch} />
-          <TrendingDevelopers />
+          <ErrorBoundary fallback={<div>Failed to load recent searches. Please refresh the page.</div>}>
+            <RecentSearches onSearch={handleSearch} />
+          </ErrorBoundary>
+          <ErrorBoundary fallback={<div>Failed to load trending developers. Please refresh the page.</div>}>
+            <TrendingDevelopers />
+          </ErrorBoundary>
         </div>
       </div>
     </div>

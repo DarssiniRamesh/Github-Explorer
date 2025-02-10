@@ -1,4 +1,5 @@
 import React from 'react';
+import { AuthenticationError, RateLimitError, NetworkError } from '../utils/errors';
 
 // PUBLIC_INTERFACE
 /**
@@ -15,7 +16,41 @@ const SearchResults = ({ repositories, onSelectRepository, isLoading, error }) =
   }
 
   if (error) {
-    return <div className="search-results error">{error}</div>;
+    let errorMessage = error;
+    let errorClass = 'error';
+    let actionButton = null;
+
+    if (error instanceof AuthenticationError) {
+      errorClass = 'auth-error';
+      actionButton = (
+        <button 
+          className="button-primary" 
+          onClick={() => window.location.href = '/login'}
+        >
+          Login to Search
+        </button>
+      );
+    } else if (error instanceof RateLimitError) {
+      errorClass = 'rate-limit-error';
+      errorMessage = `${error.message} Please try again later.`;
+    } else if (error instanceof NetworkError) {
+      errorClass = 'network-error';
+      actionButton = (
+        <button 
+          className="button-primary" 
+          onClick={() => window.location.reload()}
+        >
+          Retry Search
+        </button>
+      );
+    }
+
+    return (
+      <div className={`search-results ${errorClass}`}>
+        <div className="error-message">{errorMessage}</div>
+        {actionButton}
+      </div>
+    );
   }
 
   if (!repositories?.length) {

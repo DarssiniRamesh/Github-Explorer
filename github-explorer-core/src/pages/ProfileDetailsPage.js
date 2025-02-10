@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ProfileHeader from '../components/ProfileHeader';
+import ErrorBoundary from '../components/ErrorBoundary';
 import ActivityCalendar from '../components/ActivityCalendar';
 import StatsOverview from '../components/StatsOverview';
 import OrganizationMemberships from '../components/OrganizationMemberships';
@@ -57,12 +58,22 @@ const ProfileDetailsPage = () => {
 
   return (
     <div className="profile-details-page">
-      <ProfileHeader username={username} />
+      <ErrorBoundary fallback={<div>Failed to load profile header. Please try refreshing the page.</div>}>
+        <ProfileHeader username={username} />
+      </ErrorBoundary>
       <div className="profile-content">
-        <StatsOverview username={username} />
-        <PublicRepositoriesList username={username} />
-        <ActivityCalendar username={username} />
-        <OrganizationMemberships username={username} />
+        <ErrorBoundary fallback={<div>Failed to load stats overview. Please try refreshing the page.</div>}>
+          <StatsOverview username={username} />
+        </ErrorBoundary>
+        <ErrorBoundary fallback={<div>Failed to load repositories list. Please try refreshing the page.</div>}>
+          <PublicRepositoriesList username={username} />
+        </ErrorBoundary>
+        <ErrorBoundary fallback={<div>Failed to load activity calendar. Please try refreshing the page.</div>}>
+          <ActivityCalendar username={username} />
+        </ErrorBoundary>
+        <ErrorBoundary fallback={<div>Failed to load organization memberships. Please try refreshing the page.</div>}>
+          <OrganizationMemberships username={username} />
+        </ErrorBoundary>
       </div>
     </div>
   );

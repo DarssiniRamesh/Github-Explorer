@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { AuthenticationError, RateLimitError, NetworkError } from '../utils/errors';
 
 // PUBLIC_INTERFACE
 /**
@@ -33,9 +34,39 @@ const RepositoryDetails = ({ repository, onClose, isLoading, error }) => {
   }
 
   if (error) {
+    let errorMessage = error;
+    let errorClass = 'error';
+    let actionButton = null;
+
+    if (error instanceof AuthenticationError) {
+      errorClass = 'auth-error';
+      actionButton = (
+        <button 
+          className="button-primary" 
+          onClick={() => window.location.href = '/login'}
+        >
+          Login
+        </button>
+      );
+    } else if (error instanceof RateLimitError) {
+      errorClass = 'rate-limit-error';
+      errorMessage = `${error.message} Please try again later.`;
+    } else if (error instanceof NetworkError) {
+      errorClass = 'network-error';
+      actionButton = (
+        <button 
+          className="button-primary" 
+          onClick={() => window.location.reload()}
+        >
+          Retry
+        </button>
+      );
+    }
+
     return (
-      <div className="repository-details error">
-        <div className="error-message">{error}</div>
+      <div className={`repository-details ${errorClass}`}>
+        <div className="error-message">{errorMessage}</div>
+        {actionButton}
         <button className="button-secondary" onClick={onClose}>Close</button>
       </div>
     );

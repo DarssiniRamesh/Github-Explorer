@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { searchUsers } from '../services/github';
 import { setCacheItem, getCacheItem } from '../services/cache';
+import { AuthenticationError, RateLimitError, NetworkError } from '../utils/errors';
 
 // PUBLIC_INTERFACE
 const TrendingDevelopers = () => {
@@ -44,7 +45,41 @@ const TrendingDevelopers = () => {
   }
 
   if (error) {
-    return <div className="trending-developers error">{error}</div>;
+    let errorMessage = error;
+    let errorClass = 'error';
+    let actionButton = null;
+
+    if (error instanceof AuthenticationError) {
+      errorClass = 'auth-error';
+      actionButton = (
+        <button 
+          className="button-primary" 
+          onClick={() => window.location.href = '/login'}
+        >
+          Login to View Trending
+        </button>
+      );
+    } else if (error instanceof RateLimitError) {
+      errorClass = 'rate-limit-error';
+      errorMessage = `${error.message} Please try again later.`;
+    } else if (error instanceof NetworkError) {
+      errorClass = 'network-error';
+      actionButton = (
+        <button 
+          className="button-primary" 
+          onClick={() => window.location.reload()}
+        >
+          Retry Loading
+        </button>
+      );
+    }
+
+    return (
+      <div className={`trending-developers ${errorClass}`}>
+        <div className="error-message">{errorMessage}</div>
+        {actionButton}
+      </div>
+    );
   }
 
   return (

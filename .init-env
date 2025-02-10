@@ -1,0 +1,24 @@
+# GitHub Explorer Core Environment Configuration
+
+# Node.js Version: v18.19.1
+# npm Version: 9.2.0
+# Git Version: 2.43.0
+
+# Development Tools
+# - ESLint: Installed globally
+# - React Developer Tools: To be installed as browser extension
+# - Browser DevTools: Available in modern browsers
+
+# Build System
+# - Create React App: Available via npx (no global installation needed)
+
+# Testing Frameworks
+# - Jest: Included with Create React App
+# - React Testing Library: Included with Create React App
+
+# Runtime Requirements
+# - Modern web browsers (Chrome, Firefox, Safari, Edge)
+# - localStorage: Native browser feature
+
+# Note: Project uses pure React.js with no additional UI frameworks
+# CSS styling will be handled without external dependencies

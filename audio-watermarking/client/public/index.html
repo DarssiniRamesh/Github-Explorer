@@ -9,11 +9,18 @@
       name="description"
       content="Audio Watermarking Component - Embed and extract digital watermarks in audio files"
     />
+    <meta name="keywords" content="audio watermarking, digital watermark, audio processing, steganography" />
+    <meta name="author" content="Audio Watermarking Team" />
+    <meta name="application-name" content="Audio Watermarking" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Audio Watermarking</title>
+    <!-- Preload audio processing worker -->
+    <link rel="preload" as="worker" href="%PUBLIC_URL%/audio-worker.js" />
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <!-- Error reporting container -->
+    <div id="error-container"></div>
   </body>
 </html>

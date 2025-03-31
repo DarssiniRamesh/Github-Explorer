@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: audio-watermarking-server
+  labels:
+    app: audio-watermarking
+    tier: server
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
+    name: http
+  selector:
+    app: audio-watermarking
+    tier: server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: audio-watermarking-client
+  labels:
+    app: audio-watermarking
+    tier: client
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3000
+    targetPort: 3000
+    protocol: TCP
+    name: http
+  selector:
+    app: audio-watermarking
+    tier: client
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    app: audio-watermarking
+    tier: database
+spec:
+  type: ClusterIP
+  ports:
+  - port: 27017
+    targetPort: 27017
+    protocol: TCP
+    name: mongodb
+  selector:
+    app: audio-watermarking
+    tier: database

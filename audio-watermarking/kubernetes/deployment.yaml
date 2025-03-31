@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audio-watermarking-server
+  labels:
+    app: audio-watermarking
+    tier: server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: audio-watermarking
+      tier: server
+  template:
+    metadata:
+      labels:
+        app: audio-watermarking
+        tier: server
+    spec:
+      containers:
+      - name: server
+        image: audio-watermarking-server:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "5000"
+        - name: MONGODB_URI
+          value: "mongodb://mongo:27017/audio-watermarking"
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audio-watermarking-client
+  labels:
+    app: audio-watermarking
+    tier: client
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: audio-watermarking
+      tier: client
+  template:
+    metadata:
+      labels:
+        app: audio-watermarking
+        tier: client
+    spec:
+      containers:
+      - name: client
+        image: audio-watermarking-client:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: "production"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+  labels:
+    app: audio-watermarking
+    tier: database
+spec:
+  serviceName: mongo
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audio-watermarking
+      tier: database
+  template:
+    metadata:
+      labels:
+        app: audio-watermarking
+        tier: database
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-data
+          mountPath: /data/db
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi

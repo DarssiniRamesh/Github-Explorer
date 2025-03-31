@@ -1,0 +1,22 @@
+{
+  "name": "audio-watermarking-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-to-end tests for the Audio Watermarking Component",
+  "main": "watermarking.test.js",
+  "scripts": {
+    "test": "mocha watermarking.test.js --timeout 60000"
+  },
+  "keywords": [
+    "e2e",
+    "testing",
+    "selenium",
+    "audio",
+    "watermarking"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "mocha": "^10.2.0",
+    "selenium-webdriver": "^4.15.0"
+  }
+}

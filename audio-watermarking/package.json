@@ -5,7 +5,8 @@
   "private": true,
   "workspaces": [
     "server",
-    "client"
+    "client",
+    "e2e"
   ],
   "scripts": {
     "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
@@ -13,6 +14,8 @@
     "start:client": "npm run start --workspace=client",
     "build": "npm run build --workspaces",
     "test": "npm run test --workspaces",
+    "test:unit": "npm run test --workspace=server && npm run test --workspace=client -- --watchAll=false",
+    "test:e2e": "npm run test --workspace=e2e",
     "lint": "npm run lint --workspaces"
   },
   "keywords": [

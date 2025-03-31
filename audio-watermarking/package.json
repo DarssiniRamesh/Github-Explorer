@@ -1,0 +1,33 @@
+{
+  "name": "audio-watermarking",
+  "version": "1.0.0",
+  "description": "Audio Watermarking Component for embedding and extracting digital watermarks in audio files",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
+    "start:server": "npm run start --workspace=server",
+    "start:client": "npm run start --workspace=client",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces"
+  },
+  "keywords": [
+    "audio",
+    "watermarking",
+    "steganography",
+    "digital-rights-management"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
